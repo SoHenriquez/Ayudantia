@@ -4,12 +4,7 @@
     <!-- fin head -->
 
     <?php include('../conexion/conexion.php')?>
-    <?php $idImagen = 5;
-    $Consulta = $con->query("SELECT url FROM Imagenes where id = $idImagen");
-    $dato = $Consulta->fetch_assoc();
-    $Imagen = $dato["url"];
-    
-    ?>
+    <?php include('../conexion/buscador.php')?>
 <body>
     <div class="d-flex" id="content-wrapper">
     <!-- sideBar -->
@@ -52,8 +47,9 @@
             <table class="table table-striped ">
                 <tr class="bg-primary" style="color:white">
                     <td>ID</td>
-                    <td>IMAGEN</td>
+                    <td>url</td>
                 </tr>
+                <?php ?>
                 <tr>
                     
                     <td><?php echo $idImagen?> </td>
@@ -61,22 +57,32 @@
                 </tr>
             
             </table>
-            <form action="../conexion/buscador.php" method="GET">
+            <form action="index.php" method="GET">
                 <div class="row">
                     <div class="form-control col-4">
                         <label for="">Indique por ID la imagen</label>
                         
                     </div>
                     <div class="col-4">
-                        <input type="number" name="valor" id="">
-                        <input type="submit" value="enviar" />
+                        <input type="number" min="1" max="10" placeholder="id" name="valor" require>
+                        <input type="submit" value="ver">
                     </div>
                 </div>
                 
                 
             </form>
             
-           <?php  echo "<img src=".$Imagen." alt=''>" ?>
+           <?php  if(isset($_POST['sumbit']) && !empty($_POST['sumbit']) && $_POST['valor']){
+
+                $idImagen = $_POST['valor'];
+                $Consultasql = "SELECT url FROM imagenes WHERE id = $idImagen";
+                $consulta = mysqli_query($con,$Consultasql);
+                $dato = $consulta->fetch_assoc();
+                $Imagen = $dato["url"];
+                
+                echo"<img src".$Imagen." alt='algun gato'>";
+
+           } ?>
             
             </div>
             
